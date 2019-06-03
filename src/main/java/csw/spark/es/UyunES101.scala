@@ -10,9 +10,9 @@ object UyunES101 {
 
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("Spark ES").setMaster("local[4]")
-    conf.set("es.index.auto.create", "true")
-    conf.set("es.nodes", "10.1.61.101")
-    conf.set("es.port", "9200")
+//    conf.set("es.index.auto.create", "true")
+//    conf.set("es.nodes", "10.1.61.101")
+//    conf.set("es.port", "9200")
 
     val spark = SparkSession
       .builder().config(conf)
@@ -28,21 +28,24 @@ object UyunES101 {
       }
     }
 
-    def stringToLong(strTime: String, format: String): Long =
-      stringToDate(strTime, format).getTime
+      spark.read.format("org.elasticsearch.spark.sql")
+      .options(Map(    "es.index.auto.create"-> "true",
+        "es.nodes"-> "10.1.50.56",
+        "es.port"->"9200"))
+        .load("index_*/type_3")
+        .createOrReplaceTempView("tmp")
+//      s"SELECT * FROM nbank_ebip".repartition(1).write.option("header", "true").option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZ")
+//      .csv("F:/tmp/nbank")
+//      s"SELECT count(1) FROM nbank_ebip".write.format("org.elasticsearch.spark.sql")
+//         .options(Map(    "es.index.auto.create"-> "true",
+//      "es.nodes"-> "10.1.61.101",
+//      "es.port"->"9200")).save("spark_es/test")
 
-    def stringToDate(dateString: String, format: String): Date =
-      new SimpleDateFormat(format).parse(dateString)
-
-
-      println("nbank_ebip")
-      spark.read.format("org.elasticsearch.spark.sql").load("uyun_trans_metrics/NBANK_EBIP")
-        .createOrReplaceTempView("nbank_ebip")
-      s"SELECT * FROM nbank_ebip".repartition(1).write.option("header", "true").option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZ")
-      .csv("F:/tmp/nbank")
-      s"SELECT count(1) FROM nbank_ebip".show(false)
-
-
+//"""
+//  |select metric_name,avg(cast(metric_value as double)) as sl from e10adc3949ba59abbe56e057f20f88dd_metric_datapoint_20181130_7 group by metric_name
+//""".stripMargin.show()
+//    Thread.sleep(100000)
+"SELECT * FROM tmp".show()
 
     //    spark.udf.register("strptime", (str: String) => stringToLong(str, "yyyy-MM-dd HH:mm:ss"))
 

@@ -18,6 +18,7 @@ object SQLCassandraTest {
   def main(args: Array[String]): Unit = {
     connect()
     "SELECT sum(memory_predict),last(node) FROM jixian WHERE type_name = 'vm_stats'".show()
+    Thread.sleep(1000000)
   }
 
   def connect(host: String = "10.1.50.240") {
@@ -55,4 +56,6 @@ object SQLCassandraTest {
     }
   }
 }
+
+
 
