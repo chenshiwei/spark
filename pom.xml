@@ -44,13 +44,13 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.1.2</version>
+			<version>1.2.3</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-core_2.11</artifactId>
-			<version>2.0.1</version>
+			<version>2.3.1</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-log4j12</artifactId>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-sql_2.11</artifactId>
-			<version>2.0.1</version>
+			<version>2.3.1</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>slf4j-log4j12</artifactId>
@@ -70,24 +70,15 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.el</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
 			<artifactId>elasticsearch-spark-20_2.11</artifactId>
-			<version>6.3.2</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.apache.hbase/hbase-spark -->
-		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-spark</artifactId>
-			<version>2.0.0-alpha4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.elasticsearch</groupId>
-			<artifactId>elasticsearch</artifactId>
-			<version>2.4.0</version>
+			<version>6.8.0</version>
 		</dependency>
 
 		<dependency>
@@ -98,23 +89,33 @@
 		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-mllib_2.11</artifactId>
-			<version>2.1.0</version>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-streaming_2.11</artifactId>
-			<version>2.1.0</version>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-sql-kafka-0-10_2.11</artifactId>
+			<version>2.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb.spark</groupId>
 			<artifactId>mongo-spark-connector_2.11</artifactId>
-			<version>2.1.0</version>
+			<version>2.3.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.datastax.spark</groupId>
 			<artifactId>spark-cassandra-connector_2.11</artifactId>
-			<version>2.0.0-M3</version>
+			<version>2.3.1</version>
 		</dependency>
         <dependency>
             <groupId>org.scalaj</groupId>
@@ -124,7 +125,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.7</version>
+            <version>1.2.60</version>
         </dependency>
 
 	</dependencies>
@@ -145,58 +146,31 @@
 				<artifactId>maven-scala-plugin</artifactId>
 				<version>2.15.2</version>
 				<configuration>
-					<recompileMode>incremental</recompileMode>
+					<recompileMode>all</recompileMode>
 				</configuration>
 				<executions>
 					<execution>
+						<id>compile</id>
 						<goals>
 							<goal>compile</goal>
+						</goals>
+						<phase>compile</phase>
+					</execution>
+					<execution>
+						<id>test-compile</id>
+						<goals>
 							<goal>testCompile</goal>
 						</goals>
+						<phase>test-compile</phase>
 					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.5</version>
-				<executions>
 					<execution>
-						<id>common-copyto</id>
-						<phase>package</phase>
+						<phase>process-resources</phase>
 						<goals>
-							<goal>jar</goal>
+							<goal>compile</goal>
 						</goals>
-						<configuration>
-							<archive>
-								<manifest>
-									<addClasspath>true</addClasspath>
-								</manifest>
-							</archive>
-							<outputDirectory>lib</outputDirectory>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.1</version>
-				<executions>
-					<execution>
-						<id>core-copyto-lib</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<excludeScope>provided</excludeScope>
-							<outputDirectory>lib</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 	</build>
 </project>

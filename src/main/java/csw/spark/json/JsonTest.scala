@@ -16,7 +16,10 @@ object JsonTest extends App {
     .builder().config(conf)
     .getOrCreate()
 
-  val df = spark.read.format("json").load("../spark/src/main/resources/people.json")
+  val df= spark.read.format("json").load("../spark/src/main/resources/people.json")
+.createOrReplaceTempView("tmp")
+  spark.udf.register("myavg",MyAVG)
+spark.sql("SELECT myavg(age) FROM tmp")
 
-  df.show()
+.show()
 }

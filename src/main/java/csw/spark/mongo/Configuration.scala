@@ -94,7 +94,6 @@ object Configuration {
 
   def closeAll(): Unit = {
     spark.stop()
-    spark.close()
     sparkConf = null
     properties.clear()
   }

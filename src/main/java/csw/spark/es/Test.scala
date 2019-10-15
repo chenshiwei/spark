@@ -48,11 +48,11 @@ object Test {
     val tableMap: ArrayBuffer[String] = ArrayBuffer()
     for ((k, v) <- map.asScala) {
       for ((k2, _) <- v.get("mappings").asScala) {
-        tableMap.append(s"${k}_$k2")
-        println(s"${k}_$k2")
+        tableMap.append(s"${k.replace("-","_")}_${k2.replace("-","_")}")
+        println(s"${k.replace("-","_")}_${k2.replace("-","_")}")
         val df = spark.read.format("org.elasticsearch.spark.sql").load(s"$k/$k2")
         //        println(df.count())
-        df.createOrReplaceTempView(s"${k}_$k2")
+        df.createOrReplaceTempView(s"${k.replace("-","_")}_${k2.replace("-","_")}")
       }
     }
 
