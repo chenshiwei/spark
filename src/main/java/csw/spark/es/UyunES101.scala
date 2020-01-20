@@ -30,14 +30,14 @@ object UyunES101 {
 
         spark.read.format("org.elasticsearch.spark.sql")
             .options(Map("es.index.auto.create" -> "true",
-                "es.nodes" -> "10.1.240.117:19210"))
-            .load("dm_deep_ec31d5f4026148a39c824ec9e138a368/dm_deep_ec31d5f4026148a39c824ec9e138a368")
+                "es.nodes" -> "10.1.61.163:19210"))
+            .load("dw_7a0065b6aa7b4b89b113ba9f95f53af6_20191025/dw_7a0065b6aa7b4b89b113ba9f95f53af6")
             .createOrReplaceTempView("tmp")
 
-//        1.to(4).map(i => spark.sql(s"SELECT time_str+60000*$i AS time_str,a,b,AVG_value_1 FROM tmp"))
-//            .reduce(_.union(_)).write.format("org.elasticsearch.spark.sql")
-//            .options(Map("es.index.auto.create" -> "true", "es.nodes" -> "10.1.240.113:19210"))
-//            .mode(SaveMode.Append).save("dw_5fed05cfe35541bf8c9260a5ed96149b_20190826/dw_5fed05cfe35541bf8c9260a5ed96149b")
+        0.to(4).map(i => spark.sql(s"SELECT time+5443200000+60000*$i AS time,a,b,SUM_value_1 FROM tmp"))
+            .reduce(_.union(_)).write.format("org.elasticsearch.spark.sql")
+            .options(Map("es.index.auto.create" -> "true", "es.nodes" -> "10.1.61.163:19210"))
+            .mode(SaveMode.Append).save("dw_7a0065b6aa7b4b89b113ba9f95f53af6_20191026/dw_7a0065b6aa7b4b89b113ba9f95f53af6")
 //        spark.sql(s"SELECT time_str+60000*60*24*12 AS time_str,a,b,AVG_value_1/2.0 as AVG_value_1 FROM tmp")
 //            .write.format("org.elasticsearch.spark.sql")
 //            .options(Map("es.index.auto.create" -> "true", "es.nodes" -> "10.1.240.113:19210"))
@@ -53,7 +53,10 @@ object UyunES101 {
         //                "es.nodes" -> "10.1.11.176:19210,10.1.11.177:19210",
         //                "es.port" -> "19210")).mode(SaveMode.Append).save("dw_5db16a26592243a7bcdd90f34a136a6a_20190815/dw_5db16a26592243a7bcdd90f34a136a6a")
 
-                "SELECT * FROM tmp where timestamp=1571068320000".show(400,false)
+                "SELECT * FROM tmp".show
+//                    .write.format("org.elasticsearch.spark.sql")
+//                    .options(Map("es.index.auto.create" -> "true",
+//                        "es.nodes" -> "10.1.61.163:19210")).mode(SaveMode.Append).save("dw_hsjj2_20191025/dw_hsjj2")
 
         //      s"SELECT * FROM nbank_ebip".repartition(1).write.option("header", "true").option("timestampFormat", "yyyy/MM/dd HH:mm:ss ZZ")
         //      .csv("F:/tmp/nbank")

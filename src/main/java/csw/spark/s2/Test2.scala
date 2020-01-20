@@ -22,7 +22,7 @@ object RDDToDataSet2 {
     // For implicit conversions like converting RDDs to DataFrames
     import spark.implicits._
     val df = spark.read.json("src/main/resources/people.json")
-
+    df.randomSplit(Array(0.1,0.2,0.3,0.4)).foreach(df=>df.show())
     // Displays the content of the DataFrame to stdout
     df.show()
     // +----+-------+

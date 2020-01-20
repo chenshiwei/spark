@@ -18,36 +18,37 @@ object StructuredStreamingKafkaTest {
         //读取服务器端口发来的行数据，格式是DataFrame
         spark.conf.set("spark.sql.streaming.checkpointLocation", "D:/test")
         val df = spark.readStream.format("kafka")
-            .option("kafka.bootstrap.servers", "10.1.11.175:9292,10.1.11.176:9292,10.1.11.177:9292")
-            .option("subscribe", "topic1")
+            .option("kafka.bootstrap.servers", "10.1.11.51:9192")
+            .option("subscribe", "topic_access_a6453f496c5d4209b31caba908fb6131")
             //            .option("subscribe", "kpis_3")
             .option("startingOffsets", "earliest")
             .load()
         //隐士转换（DataFrame转DataSet）
         import org.apache.spark.sql.functions._
         import spark.implicits._
-        val smallBatchSchema = StructType(Seq(
-            StructField("kpi1", DoubleType, nullable = true),
-            StructField("kpi2", DoubleType, nullable = true),
-            StructField("kpi3", DoubleType, nullable = true),
-            StructField("kpi4", DoubleType, nullable = true),
-            StructField("kpi5", DoubleType, nullable = true),
-            StructField("kpi6", DoubleType, nullable = true),
-            StructField("kpi7", DoubleType, nullable = true),
-            StructField("kpi8", DoubleType, nullable = true),
-            StructField("time", LongType, nullable = true)
-        ))
+//        val smallBatchSchema = StructType(Seq(
+//            StructField("kpi1", DoubleType, nullable = true),
+//            StructField("kpi2", DoubleType, nullable = true),
+//            StructField("kpi3", DoubleType, nullable = true),
+//            StructField("kpi4", DoubleType, nullable = true),
+//            StructField("kpi5", DoubleType, nullable = true),
+//            StructField("kpi6", DoubleType, nullable = true),
+//            StructField("kpi7", DoubleType, nullable = true),
+//            StructField("kpi8", DoubleType, nullable = true),
+//            StructField("time", LongType, nullable = true)
+//        ))
 
         val query = df.selectExpr("CAST(value AS STRING) as json")
-            .select(from_json($"json", schema = smallBatchSchema).as("data"))
+//            .select(from_json($"json", schema = smallBatchSchema).as("data"))
             //            .select(to_json($"data").as("value"))
-            .selectExpr("data.*")
+//            .selectExpr("data.*")
             .writeStream
-            .format("kafka")
+//            .format("kafka")
             //            .option("kafka.bootstrap.servers", "10.1.11.175:9292,10.1.11.176:9292,10.1.11.177:9292")
             //            .option("topic", "topic1")
             //            .start()
             .outputMode("update")
+            .option("truncate", value = false) .option("numRows", 1000000)
             .format("console")
             .start()
 

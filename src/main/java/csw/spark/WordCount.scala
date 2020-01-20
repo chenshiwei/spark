@@ -67,6 +67,7 @@ object WordCount {
     //      sc.textFile("test").flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _)
     //        .map(x => (x._2, x._1)).sortByKey(false).map(x => (x._2, x._1)).foreach(println)
     sc.textFile("test").flatMap(_.split(" ")).map(_ -> 1).reduceByKey(_ + _).foreach(println)
+
   }
 
 }

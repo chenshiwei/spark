@@ -51,7 +51,7 @@ object Test6 extends App {
         .options(Map(
         "password"->"DBuser123!",
         "driver"->"com.mysql.jdbc.Driver",
-        "dbtable"->"kpis_mock",
+        "dbtable"->"user_behaviour",
         "user"->"dbuser",
         "url"->"jdbc:mysql://10.1.50.56:3306/ai"))
             .save()

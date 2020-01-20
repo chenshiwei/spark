@@ -14,9 +14,9 @@ object Test {
 
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("Spark ES").setMaster("local[4]")
-    conf.set("es.index.auto.create", "true")
-    conf.set("es.nodes", "10.1.61.101")
-    conf.set("es.port", "9200")
+//    conf.set("es.index.auto.create", "true")
+//    conf.set("es.nodes", "localhost")
+//    conf.set("es.port", "9200")
 
     val spark = SparkSession
       .builder().config(conf)
@@ -41,7 +41,7 @@ object Test {
 
     import scalaj.http.Http
 
-    val json = Http("http://10.1.61.101:9200/_mapping").asString.body
+    val json = Http("http://localhost:9200/_mapping").asString.body
 
     val map = JSON.parseObject(json, new TypeReference[JMap[String, JMap[String, JMap[String, Any]]]]() {})
     println(json)
@@ -50,7 +50,7 @@ object Test {
       for ((k2, _) <- v.get("mappings").asScala) {
         tableMap.append(s"${k.replace("-","_")}_${k2.replace("-","_")}")
         println(s"${k.replace("-","_")}_${k2.replace("-","_")}")
-        val df = spark.read.format("org.elasticsearch.spark.sql").load(s"$k/$k2")
+        val df = spark.read.option("es.nodes", "localhost:9200").format("org.elasticsearch.spark.sql").load(s"$k/_doc")
         //        println(df.count())
         df.createOrReplaceTempView(s"${k.replace("-","_")}_${k2.replace("-","_")}")
       }

@@ -1,12 +1,7 @@
 package csw.spark.s2
 
-import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType}
-import org.apache.spark.sql.{Row, SparkSession}
-import scala.tools.cmd.Spec.Info
-import org.apache.parquet.it.unimi.dsi.fastutil.Hash
-import org.apache.spark.sql.Dataset
-import org.apache.spark.sql.Encoder
-import org.apache.spark.sql.Encoders
+import org.apache.spark.SparkFiles
+import org.apache.spark.sql.SparkSession
 
 /**
   * RDD API to Dataset API
@@ -14,29 +9,16 @@ import org.apache.spark.sql.Encoders
   */
 object RDDToDataSet3 extends App {
 
-  val spark = SparkSession.builder.
-    master("local")
-    .appName("example")
-    .getOrCreate()
+    val spark = SparkSession.builder.
+        master("local[8]")
+        .appName("chensw")
+        .getOrCreate()
 
-  import org.apache.spark.sql.types._
+    val rdd = spark.sparkContext.makeRDD(Array(1, 2, 3))
+    spark.sparkContext.addFile("hdfs://10.1.62.12:19000/uyun/databank/spark/cert/keyStore.txt_1575553586460")
+    rdd.foreach(println)
 
-  val data = Array(("464", "2", "3", "4", "5"), ("hu", "7", "8", "9", "10"))
-  val df = spark.createDataFrame(data).toDF("col1", "col2", "col3", "col4", "col5")
+    println(SparkFiles.get("keyStore.txt_1575553586460"))
 
-  import org.apache.spark.sql.functions._
-
-  df.printSchema()
-  val colNames = df.columns
-  var df1 = df
-  //  val cols = colNames.map(f => col(f).cast(DoubleType))
-  for (colName <- colNames) {
-
-    val tmp = df.withColumn(colName, col(colName).cast(DoubleType))
-    if (tmp.select(colName).collect().map(_.getAs[Double](colName) != null).reduce(_ && _)) df1 = tmp
-
-  }
-  df1.show()
-
-
+    Thread.sleep(100000)
 }

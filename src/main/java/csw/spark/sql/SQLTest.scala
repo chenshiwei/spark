@@ -1,14 +1,15 @@
 package csw.spark.sql
 
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.SaveMode
-import org.apache.spark.{ SparkConf, SparkContext }
+import org.apache.spark.sql.{Column, DataFrame, SaveMode, SparkSession}
+import org.apache.spark.{SparkConf, SparkContext}
 import java.util.Properties
 import java.io.File
 import java.util.concurrent._
 import java.util.Collections
+
 import scala.collection.JavaConverters._
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.functions._
+
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -26,10 +27,12 @@ object SQLTest {
 
     // For implicit conversions like converting RDDs to DataFrames
     import spark.implicits._
-    val df = spark.read.json("src/main/resources/people.json")
+    val df = spark.read.json("../spark/src/main/resources/people.json")
 
     // Displays the content of the DataFrame to stdout
     df.show()
+    df.select(to_json(struct(df.schema.map(h=>col(h.name)): _*)).as("value")).show
+
     // +----+-------+
     // | age|   name|
     // +----+-------+
