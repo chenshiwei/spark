@@ -124,9 +124,9 @@ object Test5 extends App {
     )
 
     println(eventList.length)
-    val rdd: RDD[Event] = spark.read.option("header", true).csv("E:/tmp/test.csv")
+    val rdd: RDD[Event] = spark.read.csv("E:/tmp/test.csv")
         .rdd.map(row => {
-        val time = row.getString(0).toLong + TimeUnit.DAYS.toMillis(42)
+        val time = row.getString(0).toLong + TimeUnit.DAYS.toMillis(234)
         Event(time, longToString(time, "yyyy-MM-dd HH:mm:ss"), eventList(row.getString(1).substring(5).toInt))
     })
 
@@ -139,7 +139,7 @@ object Test5 extends App {
             "driver" -> "com.mysql.jdbc.Driver",
             "dbtable" -> "event_mock2",
             "user" -> "dbuser",
-            "url" -> "jdbc:mysql://10.1.50.56:3306/ai"))
+            "url" -> "jdbc:mysql://10.1.11.52:3306/ai"))
         .save()
 
     case class Event(time: Long, timestamp: String, event: String)

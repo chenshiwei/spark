@@ -18,8 +18,8 @@ object StructuredStreamingKafkaTest {
         //读取服务器端口发来的行数据，格式是DataFrame
         spark.conf.set("spark.sql.streaming.checkpointLocation", "D:/test")
         val df = spark.readStream.format("kafka")
-            .option("kafka.bootstrap.servers", "10.1.11.51:9192")
-            .option("subscribe", "topic_access_a6453f496c5d4209b31caba908fb6131")
+            .option("kafka.bootstrap.servers", "10.1.11.153:9192")
+            .option("subscribe", "iris")
             //            .option("subscribe", "kpis_3")
             .option("startingOffsets", "earliest")
             .load()

@@ -15,21 +15,21 @@ object SQLCSV2 {
       .appName("Spark SQL basic example")
       .getOrCreate()
 
-//    1535811000000L.to(1536934200000L,300000L*12*24).map(l=>
-    //      spark.read.csv(s"D:\\tmp\\2019AIOps_data_(20190131update)\\$l.csv"))
+//    1535811000000L.to(1536934200000L,300000L*12*24).map(URLEncoderTest=>
+    //      spark.read.csv(s"D:\\tmp\\2019AIOps_data_(20190131update)\\$URLEncoderTest.csv"))
     //      .reduce(_.union(_)).createOrReplaceTempView("tmp")
     //
     //    spark.sql("SELECT _c0,_c1,_c2,_c3,_c4,avg(_c5) FROM tmp group by _c0,_c1,_c2,_c3,_c4")
     //      .repartition(1).write.csv("D:\\tmp\\csv3")
 
-//    1535808300000L.to(1536931500000L,300000L*12*24).map(l=>
-//      spark.read.csv(s"D:\\tmp\\2019AIOps_data_(20190131update)\\$l.csv"))
+//    1535808300000L.to(1536931500000L,300000L*12*24).map(URLEncoderTest=>
+//      spark.read.csv(s"D:\\tmp\\2019AIOps_data_(20190131update)\\$URLEncoderTest.csv"))
 //      .reduce(_.union(_)).createOrReplaceTempView("tmp")
 //
 //    spark.sql("SELECT _c0,_c1,_c2,_c3,_c4,avg(_c5) FROM tmp group by _c0,_c1,_c2,_c3,_c4")
 //      .repartition(1).write.csv("D:\\tmp\\csv3")
-//    1535791500000L.to(1536914700000L,300000L*12*24).map(l=>
-//      spark.read.csv(s"D:\\tmp\\2019AIOps_data_(20190131update)\\$l.csv"))
+//    1535791500000L.to(1536914700000L,300000L*12*24).map(URLEncoderTest=>
+//      spark.read.csv(s"D:\\tmp\\2019AIOps_data_(20190131update)\\$URLEncoderTest.csv"))
 //      .reduce(_.union(_)).createOrReplaceTempView("tmp")
 //
 //    spark.sql("SELECT _c0,_c1,_c2,_c3,_c4,avg(_c5) FROM tmp group by _c0,_c1,_c2,_c3,_c4")

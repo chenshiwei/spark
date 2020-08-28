@@ -22,7 +22,6 @@ object Test6 extends App {
     val spark = SparkSession
         .builder().config(conf)
         .getOrCreate()
-
     def longToString(timestamp: Long, format: String): String =
         new SimpleDateFormat(format).format(new Date(timestamp))
 
@@ -34,26 +33,26 @@ object Test6 extends App {
     val array: Seq[KPIS] =0.until(288).map(i=>{
     val time = leftDay(System.currentTimeMillis())+i*300000L
       KPIS(time,longToString(time,"yyyy-MM-dd HH:mm:ss"),
-          random.nextDouble(),
-          random.nextDouble(),
-          random.nextDouble(),
-          random.nextDouble(),
-          random.nextDouble(),
-          random.nextDouble(),
-          random.nextDouble(),
-          random.nextDouble()
+         f"${random.nextDouble()*100}%1.2f".toDouble,
+         f"${random.nextDouble()*100}%1.2f".toDouble,
+         f"${random.nextDouble()*100}%1.2f".toDouble,
+         f"${random.nextDouble()*100}%1.2f".toDouble,
+         f"${random.nextDouble()*100}%1.2f".toDouble,
+         f"${random.nextDouble()*100}%1.2f".toDouble,
+         f"${random.nextDouble()*100}%1.2f".toDouble,
+         f"${random.nextDouble()*100}%1.2f".toDouble
       )
 })
     val rdd: RDD[KPIS] = spark.sparkContext.makeRDD(array)
 
     spark.createDataFrame(rdd).write.format("jdbc")
-        .mode(SaveMode.Append)
+        .mode(SaveMode.Overwrite)
         .options(Map(
         "password"->"DBuser123!",
         "driver"->"com.mysql.jdbc.Driver",
-        "dbtable"->"user_behaviour",
+        "dbtable"->"kpis",
         "user"->"dbuser",
-        "url"->"jdbc:mysql://10.1.50.56:3306/ai"))
+        "url"->"jdbc:mysql://10.1.11.52:3306/ai"))
             .save()
 
     case class KPIS(time:Long,

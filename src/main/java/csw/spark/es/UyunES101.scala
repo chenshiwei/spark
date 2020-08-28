@@ -30,14 +30,14 @@ object UyunES101 {
 
         spark.read.format("org.elasticsearch.spark.sql")
             .options(Map("es.index.auto.create" -> "true",
-                "es.nodes" -> "10.1.61.163:19210"))
-            .load("dw_7a0065b6aa7b4b89b113ba9f95f53af6_20191025/dw_7a0065b6aa7b4b89b113ba9f95f53af6")
+                "es.nodes" -> "10.1.11.44:9200"))
+            .load("dw_metric_model_20200316/_doc")
             .createOrReplaceTempView("tmp")
 
-        0.to(4).map(i => spark.sql(s"SELECT time+5443200000+60000*$i AS time,a,b,SUM_value_1 FROM tmp"))
-            .reduce(_.union(_)).write.format("org.elasticsearch.spark.sql")
-            .options(Map("es.index.auto.create" -> "true", "es.nodes" -> "10.1.61.163:19210"))
-            .mode(SaveMode.Append).save("dw_7a0065b6aa7b4b89b113ba9f95f53af6_20191026/dw_7a0065b6aa7b4b89b113ba9f95f53af6")
+//        0.to(4).map(i => spark.sql(s"SELECT time+5443200000+60000*$i AS time,a,b,SUM_value_1 FROM tmp"))
+//            .reduce(_.union(_)).write.format("org.elasticsearch.spark.sql")
+//            .options(Map("es.index.auto.create" -> "true", "es.nodes" -> "10.1.61.163:19210"))
+//            .mode(SaveMode.Append).save("dw_7a0065b6aa7b4b89b113ba9f95f53af6_20191026/dw_7a0065b6aa7b4b89b113ba9f95f53af6")
 //        spark.sql(s"SELECT time_str+60000*60*24*12 AS time_str,a,b,AVG_value_1/2.0 as AVG_value_1 FROM tmp")
 //            .write.format("org.elasticsearch.spark.sql")
 //            .options(Map("es.index.auto.create" -> "true", "es.nodes" -> "10.1.240.113:19210"))

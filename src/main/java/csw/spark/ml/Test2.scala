@@ -22,7 +22,7 @@ object Test2 {
 
     val test = spark.createDataFrame(Seq(
       (4L, "spark i j k"),
-      (5L, "l m n"),
+      (5L, "URLEncoderTest m n"),
       (6L, "spark a"),
       (7L, "apache hadoop")
     )).toDF("id", "text")
